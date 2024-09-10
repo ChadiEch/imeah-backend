@@ -1,17 +1,18 @@
-FROM node:20.16.0
+FROM node:20-alpine
 
-# create app directory, this is in our container/image
-WORKDIR /usr/src/app
+WORKDIR /
 
+# Install bash
+RUN apk add --no-cache bash
 
-COPY package*.json ./ 
+COPY package*.json ./
 
 RUN npm install
 
-COPY . . 
+COPY . .
 
-RUN npm run build
+RUN npx prisma generate
 
-EXPOSE 8080
+EXPOSE 5000
 
-CMD [ "node", "dist/main" ]
+CMD ["npm", "run", "start"]
